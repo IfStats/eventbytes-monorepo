@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Organizer {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  events    Event[]  // Add this relation line
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  date        DateTime
+  location    String
+  description String?
+  createdAt   DateTime  @default(now())
+  organizerId Int       // Add foreign key
+  organizer   Organizer @relation(fields: [organizerId], references: [id]) // Add relation mapping
+}
