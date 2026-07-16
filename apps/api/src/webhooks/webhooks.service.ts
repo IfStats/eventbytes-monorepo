@@ -24,7 +24,21 @@ export class WebhooksService {
 		const ticketTierId = metadata?.ticket_tier_id;
 
 		await this.prisma.$transaction(async (tx) => {
-			await tx.ticketTier.update({
+			const ticketTierDelegate = (
+				tx as typeof tx & {
+					ticketTier?: { update: (args: any) => Promise<unknown> };
+					ticket_tier?: { update: (args: any) => Promise<unknown> };
+					ticketTiers?: { update: (args: any) => Promise<unknown> };
+				}
+			).ticketTier
+				?? (tx as any).ticket_tier
+				?? (tx as any).ticketTiers;
+
+			if (!ticketTierDelegate) {
+				throw new BadRequestException('Ticket tier model is not defined on Prisma transaction client. Check prisma/schema.prisma model naming.');
+			}
+
+			await ticketTierDelegate.update({
 				where: { id: ticketTierId },
 				data: {
 					quantitySold: {
