@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { apiClient } from '@/lib/api-client';
 
 interface TicketTierInput {
   name: string;
@@ -61,7 +60,7 @@ export default function NewEventPage() {
         })),
       };
 
-      await apiClient('/events', {
+      const response = await fetch('/your-api-endpoint', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,6 +68,10 @@ export default function NewEventPage() {
         },
         body: JSON.stringify(payload),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to create event listings.');
+      }
 
       router.push('/dashboard');
     } catch (err: any) {
