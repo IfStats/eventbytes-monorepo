@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 
@@ -113,6 +114,13 @@ export default function RegisterPage() {
               {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
           </div>
+
+          <p className="text-center text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link href="/login" className="text-blue-500 underline">
+              Sign in here
+            </Link>
+          </p>
         </form>
       </div>
     </div>
