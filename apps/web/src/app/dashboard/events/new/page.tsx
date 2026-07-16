@@ -63,8 +63,11 @@ export default function NewEventPage() {
 
       await apiClient('/events', {
         method: 'POST',
-        headers: { 'x-organizer-id': 'mock-organizer-uuid' },
-        body: payload,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-organizer-id': 'mock-organizer-uuid',
+        },
+        body: JSON.stringify(payload),
       });
 
       router.push('/dashboard');
