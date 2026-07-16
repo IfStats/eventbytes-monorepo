@@ -1,15 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
+let cachedServer: any;
+
+// Serverless handler for Vercel production
+export default async function handler(req: any, res: any) {
+  if (!cachedServer) {
+    const app = await NestFactory.create(AppModule);
+    app.enableCors();
+    await app.init();
+    cachedServer = app.getHttpAdapter().getInstance();
+  }
+  return cachedServer(req, res);
+}
+
+// Local development fallback
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  // Enable CORS so your Next.js app on port 3000 can talk to NestJS on port 4000
-  app.enableCors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  });
-
-  await app.listen(4000);
+  if (process.env.NODE_ENV !== 'production') {
+    const app = await NestFactory.create(AppModule);
+    await app.listen(3000);
+  }
 }
 bootstrap();
