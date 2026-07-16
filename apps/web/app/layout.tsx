@@ -1,0 +1,21 @@
+import React from 'react';
+import "./globals.css";
+
+export const metadata = {
+  title: 'EventBytes',
+  description: 'Discover and host incredible local events.',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" style={{ margin: 0, padding: 0 }}>
+      <body style={{ margin: 0, padding: 0, backgroundColor: '#f9fafb' }}>
+        {children}
+      </body>
+    </html>
+  );
+}
