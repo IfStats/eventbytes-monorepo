@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate --schema=../../prisma/schema.prisma"
+    "postinstall": "ls -R ../.. && prisma generate --schema=../../prisma/schema.prisma"
   },
   "dependencies": {
     "@eventbytes/types": "file:../../packages/types",
