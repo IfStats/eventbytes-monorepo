@@ -7,6 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "postinstall": "prisma generate",
+    "seed": "prisma db seed",
+    "seed:direct": "ts-node.cmd prisma/seed.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -84,5 +86,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

@@ -1,6 +1,10 @@
 {
   "name": "eventbytes-monorepo",
+  "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "workspaces": [
     "apps/*"
   ],

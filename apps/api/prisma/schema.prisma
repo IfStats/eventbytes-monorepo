@@ -11,7 +11,7 @@ model Organizer {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
-  events    Event[]  // Add this relation line
+  events    Event[]
 }
 
 model Event {
@@ -20,7 +20,18 @@ model Event {
   date        DateTime
   location    String
   description String?
+  isFeatured  Boolean   @default(false)
   createdAt   DateTime  @default(now())
-  organizerId Int       // Add foreign key
-  organizer   Organizer @relation(fields: [organizerId], references: [id]) // Add relation mapping
+
+  organizerId Int
+  organizer   Organizer @relation(fields: [organizerId], references: [id])
+
+  categoryId  Int
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  events Event[]
 }

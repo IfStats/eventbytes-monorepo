@@ -36,7 +36,8 @@ export default function RegisterPage() {
       // Successfully registered, forward them to the login or dashboard view
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      console.error('REGISTRATION_ERROR:', err);
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }

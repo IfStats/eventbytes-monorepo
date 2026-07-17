@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@eventbytes/types": "file:../../packages/types",
+    "@prisma/client": "^7.8.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/ssr": "^0.12.3",

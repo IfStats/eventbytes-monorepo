@@ -17,40 +17,42 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    try {
+      // 1. Sign up the user in Supabase Auth
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    // 1. Sign up the user in Supabase Auth
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (signUpError) {
-      setError(signUpError.message);
-      setLoading(false);
-      return;
-    }
-
-    // 2. Insert metadata into public.profiles
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([
-          {
-            id: data.user.id,
-            full_name: fullName,
-            phone: phone, // Save the phone number
-          }
-        ]);
-
-      if (profileError) {
-        setError('Profile creation failed: ' + profileError.message);
-        setLoading(false);
-        return;
+      if (signUpError) {
+        throw signUpError;
       }
-    }
 
-    // Redirect to login or home after successful signup
-    router.push('/auth/login?registered=true');
+      // 2. Insert metadata into public.profiles
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            {
+              id: data.user.id,
+              full_name: fullName,
+              phone: phone, // Save the phone number
+            }
+          ]);
+
+        if (profileError) {
+          throw new Error('Profile creation failed: ' + profileError.message);
+        }
+      }
+
+      // Redirect to login or home after successful signup
+      router.push('/auth/login?registered=true');
+    } catch (error) {
+      console.error('REGISTRATION_ERROR:', error);
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

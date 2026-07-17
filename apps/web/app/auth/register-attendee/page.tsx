@@ -17,28 +17,32 @@ export default function RegisterAttendeePage() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    // Sign up the attendee user with metadata
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          role: 'attendee',
-          full_name: fullName,
-          phone: phone,
+    try {
+      // Sign up the attendee user with metadata
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            role: 'attendee',
+            full_name: fullName,
+            phone: phone,
+          }
         }
+      });
+
+      if (signUpError) {
+        throw signUpError;
       }
-    });
 
-    if (signUpError) {
-      setError(signUpError.message);
+      // Redirect attendee directly to their ticket wallet page
+      router.push('/tickets');
+    } catch (error) {
+      console.error('REGISTRATION_ERROR:', error);
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Redirect attendee directly to their ticket wallet page
-    router.push('/tickets');
   };
 
   return (
