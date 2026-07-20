@@ -1,0 +1,41 @@
+
+> build
+> npm run build --workspace=apps/web
+
+
+> web@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of c:\Users\Pathway Learner\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * c:\Users\Pathway Learner\eventbytes-monorepo\package-lock.json
+
+▲ Next.js 16.2.10 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 14.7s
+  Running TypeScript ...
+Failed to type check.
+
+./app/actions/event.ts:31:7
+Type error: Object literal may only specify known properties, and 'coverImage' does not exist in type '(Without<EventCreateInput, EventUncheckedCreateInput> & EventUncheckedCreateInput) | (Without<...> & EventCreateInput)'.
+
+  [90m29 |[0m       date: [36mnew[0m [33mDate[0m(date),
+  [90m30 |[0m       location,
+[31m[1m>[0m [90m31 |[0m       coverImage,
+  [90m   |[0m       [31m[1m^[0m
+  [90m32 |[0m       hostId: userId,
+  [90m33 |[0m       ticketTypes: {
+  [90m34 |[0m         create: {
+Next.js build worker exited with code: 1 and signal: null
+npm error Lifecycle script `build` failed with error:
+npm error code 1
+npm error path c:\Users\Pathway Learner\eventbytes-monorepo\apps\web
+npm error workspace web@0.1.0
+npm error location c:\Users\Pathway Learner\eventbytes-monorepo\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c next build

@@ -1,33 +1,11 @@
 {
   "name": "eventbytes-monorepo",
-  "version": "0.1.0",
   "private": true,
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=apps/api & npm run dev --workspace=apps/web",
-    "build": "turbo run build",
-    "start": "turbo run start"
-  },
-  "devDependencies": {
-    "@nestjs/cli": "^11.0.23",
-    "@types/bcrypt": "^6.0.0",
-    "@types/passport-jwt": "^4.0.1"
-  },
-  "dependencies": {
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/passport": "^11.0.5",
-    "@supabase/server": "^1.4.0",
-    "@supabase/ssr": "^0.12.3",
-    "@supabase/supabase-js": "^2.110.6",
-    "bcrypt": "^6.0.0",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "qrcode.react": "^4.2.0"
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web"
   }
 }

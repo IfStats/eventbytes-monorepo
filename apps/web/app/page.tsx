@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
 import { supabase } from './lib/supabase';
 
 interface Event {
@@ -64,12 +65,17 @@ export default function PublicEventFeed() {
             >
               Host an Event
             </Link>
-            <Link
-              href="/auth/register-attendee"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold shadow-lg shadow-[#7C3AED]/25"
-            >
-              Sign Up / View Tickets
-            </Link>
+            <SignInButton>
+              <button className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold shadow-lg shadow-[#7C3AED]/25 cursor-pointer">
+                Sign In
+              </button>
+            </SignInButton>
+            <SignUpButton>
+              <button className="px-5 py-2.5 rounded-xl border border-[#7C3AED] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-sm font-semibold text-[#7C3AED] cursor-pointer">
+                Sign Up
+              </button>
+            </SignUpButton>
+            <UserButton />
           </nav>
         </div>
       </header>
