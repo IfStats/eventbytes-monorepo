@@ -12,10 +12,12 @@
   "dependencies": {
     "@clerk/nextjs": "^6.39.6",
     "@eventbytes/types": "file:../../packages/types",
+    "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.9.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.7",
     "next": "latest",
+    "pg": "^8.22.0",
     "qrcode.react": "^4.2.0",
     "react": "latest",
     "react-dom": "latest",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
