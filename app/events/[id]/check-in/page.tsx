@@ -46,7 +46,7 @@ export default async function EventCheckInPage({ params, searchParams }: CheckIn
     revalidatePath(`/events/${eventId}/check-in`)
   }
 
-  const checkedInCount = event.registrations.filter((registration) => registration.isCheckedIn).length
+  const checkedInCount = event.registrations.filter((registration: any) => registration.isCheckedIn).length
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 space-y-8">
