@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  date          DateTime
+  location      String
+  coverImage    String?
+  hostId        String
+  ticketTypes   TicketType[]
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+}
+
+model TicketType {
+  id            String         @id @default(cuid())
+  name          String
+  price         Float
+  quantity      Int
+  eventId       String
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+}
+
+model Registration {
+  id          String     @id @default(cuid())
+  name        String
+  email       String
+  eventId     String
+  ticketTypeId String
+  isCheckedIn Boolean    @default(false)
+  checkedInAt DateTime?
+  event       Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  ticketType  TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+}
