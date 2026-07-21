@@ -1,12 +1,20 @@
 import Link from 'next/link'
 
-import { prisma } from '@/lib/prisma'
+import { getFilteredEvents } from '@/app/actions/event'
+import { EventFilters } from '@/components/EventFilters'
 
-export default async function PublicEventsPage() {
-  const events = await prisma.event.findMany({
-    orderBy: { date: 'asc' },
-    include: { ticketTypes: true },
-  })
+interface PublicEventsPageProps {
+  searchParams?: {
+    q?: string | string[]
+    location?: string | string[]
+  }
+}
+
+export default async function PublicEventsPage({ searchParams }: PublicEventsPageProps) {
+  const q = typeof searchParams?.q === 'string' ? searchParams.q : ''
+  const location = typeof searchParams?.location === 'string' ? searchParams.location : ''
+
+  const events = await getFilteredEvents({ q, location })
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-4 space-y-8">
@@ -14,6 +22,8 @@ export default async function PublicEventsPage() {
         <h1 className="text-4xl font-extrabold text-gray-900">Explore Upcoming Events</h1>
         <p className="text-gray-600">Discover experiences, secure your tickets, and connect with communities on EventBytes.</p>
       </div>
+
+      <EventFilters />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {events.length === 0 ? (
