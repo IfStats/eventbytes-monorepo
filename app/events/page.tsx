@@ -21,7 +21,7 @@ export default async function PublicEventsPage() {
             No public events posted yet. Check back soon!
           </div>
         ) : (
-          events.map((event) => (
+          events.map((event: any) => (
             <Link
               key={event.id}
               href={`/events/${event.id}`}
