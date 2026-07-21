@@ -34,6 +34,7 @@ model Registration {
   id          String     @id @default(cuid())
   name        String
   email       String
+  status      String     @default("PENDING")
   eventId     String
   ticketTypeId String
   isCheckedIn Boolean    @default(false)
