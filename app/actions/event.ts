@@ -1,10 +1,17 @@
 'use server'
 
+import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 export async function createEvent(formData: FormData) {
+  const { userId } = await auth()
+
+  if (!userId) {
+    throw new Error('Unauthorized')
+  }
+
   const title = formData.get('title') as string
   const description = formData.get('description') as string
   const date = formData.get('date') as string
@@ -23,6 +30,7 @@ export async function createEvent(formData: FormData) {
         date: new Date(date),
         location,
         price,
+        hostId: userId,
       },
     })
   } catch (error) {
