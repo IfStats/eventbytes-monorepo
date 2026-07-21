@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { QRCodeSVG } from 'qrcode.react'
 import { notFound } from 'next/navigation'
-
-const prisma = new PrismaClient()
 
 interface PageProps {
   params: { id: string }
