@@ -3,7 +3,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 
-import { prisma } from '../../src/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 export async function createEvent(formData: FormData) {
   const { userId } = await auth()
