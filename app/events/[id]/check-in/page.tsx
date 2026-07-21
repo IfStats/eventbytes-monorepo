@@ -72,7 +72,7 @@ export default async function EventCheckInPage({ params, searchParams }: CheckIn
           {event.registrations.length === 0 ? (
             <div className="p-12 text-center text-gray-500">No registrations found for this event yet.</div>
           ) : (
-            event.registrations.map((registration) => (
+            event.registrations.map((registration: any) => (
               <div key={registration.id} className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-gray-50 transition">
                 <div>
                   <h3 className="font-semibold text-gray-900">{registration.name}</h3>
