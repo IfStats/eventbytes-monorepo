@@ -20,7 +20,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./*"],
       "@eventbytes/types": ["../../packages/types/index.ts"]
     }
   },
