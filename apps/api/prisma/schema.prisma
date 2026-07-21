@@ -43,6 +43,8 @@ model Registration {
   email        String        // Captures attendee email for guest checkouts
   name         String        // Attendee full name
   qrCodeToken  String        @unique @default(cuid()) // Unique token for door check-in scanning
+  isCheckedIn  Boolean       @default(false)
+  checkedInAt  DateTime?
   status       String        @default("PENDING")      // PENDING, PAID, CANCELLED
   createdAt    DateTime      @default(now())
 }

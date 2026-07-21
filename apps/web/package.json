@@ -13,6 +13,7 @@
     "@eventbytes/types": "file:../../packages/types",
     "@prisma/client": "^7.8.0",
     "next": "latest",
+    "qrcode.react": "^4.2.0",
     "react": "latest",
     "react-dom": "latest"
   },

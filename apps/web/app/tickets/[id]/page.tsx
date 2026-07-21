@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { QRCodeSVG } from 'qrcode.react'
 import { notFound } from 'next/navigation'
 
 const prisma = new PrismaClient()
@@ -58,12 +59,13 @@ export default async function TicketPage({ params }: PageProps) {
             <span className="font-medium text-gray-900 text-right">{registration.event.location}</span>
           </div>
 
-          <div className="pt-4 text-center">
-            <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 space-y-2">
-              <div className="font-mono text-xs text-gray-400 bg-white py-2 px-3 rounded border">
-                QR Token: {registration.qrCodeToken}
-              </div>
-              <p className="text-xs text-gray-500">Show this code at the door for scanning</p>
+          <div className="flex flex-col items-center justify-center p-6 bg-white border border-gray-100 rounded-2xl shadow-sm space-y-4">
+            <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <QRCodeSVG value={registration.id} size={180} />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-medium text-gray-900">Show this QR code at the door</p>
+              <p className="text-xs text-gray-400 font-mono mt-1">{registration.id}</p>
             </div>
           </div>
         </div>

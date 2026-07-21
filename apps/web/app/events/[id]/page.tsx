@@ -48,9 +48,6 @@ export default function EventDetailsPage() {
     { name: '', email: '', phone: '' }
   ]);
 
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentProcessing, setPaymentProcessing] = useState(false);
-
   useEffect(() => {
     async function initPage() {
       const { data: { user: authUser } } = await supabase.auth.getUser();
@@ -120,18 +117,52 @@ export default function EventDetailsPage() {
     });
   };
 
-  const handleCheckoutClick = (e: React.FormEvent) => {
+  const handleCheckoutClick = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
       router.push('/auth/register-attendee');
       return;
     }
 
-    if (event && event.ticket_price > 0) {
-      setShowPaymentModal(true);
-    } else {
-      executeBooking();
+    if (!event) {
+      return;
     }
+
+    if (event.ticket_price > 0) {
+      setBooking(true);
+
+      try {
+        const primaryAttendee = attendees[0] || { name: '', email: '', phone: '' };
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventId: id,
+            ticketTypeId: undefined,
+            amount: totalCost,
+            name: primaryAttendee.name,
+            email: primaryAttendee.email,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.authorization_url) {
+          window.location.href = data.authorization_url;
+          return;
+        }
+
+        alert(data.error || 'Something went wrong');
+      } catch (error) {
+        console.error(error);
+        alert('Something went wrong');
+      } finally {
+        setBooking(false);
+      }
+
+      return;
+    }
+
+    executeBooking();
   };
 
   const executeBooking = async () => {
@@ -166,17 +197,6 @@ export default function EventDetailsPage() {
       setTicket(newTicket);
     }
     setBooking(false);
-    setShowPaymentModal(false);
-  };
-
-  const handleMockPaymentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPaymentProcessing(true);
-
-    setTimeout(() => {
-      setPaymentProcessing(false);
-      executeBooking();
-    }, 2000);
   };
 
   if (loading) {
@@ -396,7 +416,7 @@ export default function EventDetailsPage() {
                     {booking ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : user ? (
-                      event.ticket_price > 0 ? 'Proceed to Payment' : 'Confirm Free Booking'
+                      event.ticket_price > 0 ? `Pay ₦${totalCost.toLocaleString()} & Get Ticket` : 'Confirm Free Booking'
                     ) : (
                       'Sign In to Checkout'
                     )}
@@ -450,96 +470,6 @@ export default function EventDetailsPage() {
         </div>
       </main>
 
-      {/* Payment Processing Modal */}
-      {showPaymentModal && event && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-[#0F172A] border border-white/10 rounded-2xl p-6 w-full max-w-md space-y-6 relative animate-in fade-in zoom-in duration-200">
-            <button
-              onClick={() => setShowPaymentModal(false)}
-              className="absolute top-4 right-4 text-[#94A3B8] hover:text-white text-lg"
-            >
-              ✕
-            </button>
-            <div className="space-y-1">
-              <span className="text-xs text-indigo-400 font-bold uppercase tracking-widest">Secure Checkout</span>
-              <h3 className="text-xl font-bold" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>Payment Information</h3>
-            </div>
-
-            <div className="p-4 bg-white/5 border border-white/5 rounded-xl space-y-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[#94A3B8]">Tickets:</span>
-                <span>{quantity}x</span>
-              </div>
-              <div className="flex justify-between font-bold text-emerald-400">
-                <span>Total Due:</span>
-                <span>${totalCost.toFixed(2)}</span>
-              </div>
-            </div>
-
-            <form onSubmit={handleMockPaymentSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#94A3B8] uppercase">Cardholder Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="John Doe"
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none text-white"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-[#94A3B8] uppercase">Card Number</label>
-                <input
-                  type="text"
-                  required
-                  pattern="\d{16}"
-                  maxLength={16}
-                  placeholder="4111 2222 3333 4444"
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none text-white font-mono"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[#94A3B8] uppercase">Expiry Date</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="MM/YY"
-                    maxLength={5}
-                    className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none text-white font-mono"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-[#94A3B8] uppercase">CVV</label>
-                  <input
-                    type="password"
-                    required
-                    maxLength={3}
-                    placeholder="•••"
-                    className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-indigo-500 focus:outline-none text-white font-mono"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={paymentProcessing}
-                className="w-full mt-4 py-4 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#5B21B6] hover:scale-[1.02] active:scale-[0.98] disabled:scale-100 disabled:opacity-50 transition font-semibold text-center flex items-center justify-center gap-2"
-              >
-                {paymentProcessing ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Processing Secure Payment...
-                  </>
-                ) : (
-                  `Pay $${totalCost.toFixed(2)} & Book`
-                )}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
